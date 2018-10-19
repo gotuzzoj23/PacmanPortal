@@ -1,1 +1,1 @@
-# PacmanPortalPacman Portal game by Jose Gotuzzo
+# PacmanPortal game by Jose Gotuzzo
