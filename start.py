@@ -21,6 +21,12 @@ class Start:
         """Initialize button attributes."""
         self.screen = screen
         self.screen_rect = screen.get_rect()
+
+        self.pacs = []
+        self.reds = []
+        self.blues = []
+        self.pinks = []
+        self.oranges = []
         self.create_figures(self.screen)
 
         # Start screen
@@ -40,12 +46,6 @@ class Start:
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.centerx = self.screen_rect.centerx
         self.rect.centery = self.screen_rect.bottom - 50
-
-        self.pacs = []
-        self.reds = []
-        self.blues = []
-        self.pinks = []
-        self.oranges = []
 
         self.playing = False
         # The button message and background needs to be prepped only once

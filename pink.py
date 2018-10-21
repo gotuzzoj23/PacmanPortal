@@ -76,7 +76,7 @@ class Pink(Sprite):
                 self.screen.blit(self.pinks[3][self.index].image, self.pink.rect)
         self.index += 1
 
-    def update(self, maze, stats, pacman, startup, blue, red, orange, sb):
+    def update(self, maze, settings, stats, pacman, startup, blue, red, orange, sb):
         """Update the pink's position based on the movement flag."""
         x = int(self.pink.rect.centerx / 12)
         y = int(self.pink.rect.centery / 12)
@@ -114,19 +114,26 @@ class Pink(Sprite):
         self.pink.rect.centery = self.centery
 
         if (pygame.Rect.colliderect(pacman.pacman.rect, self.pink.rect)) and (not self.scared):
-            pacman.reset_pacman()
-            self.reset_pink()
-            stats.pacmans_left -= 1
-            print(stats.pacmans_left)
             if stats.pacmans_left == 0:
-                if stats.pacmans_left == 0:
-                    startup.playing = False
-                    self.reset_figures(blue, orange, red, pacman)
-                    maze.reset_maze()
-                    if stats.score > stats.high_score:
-                        stats.high_score = stats.score
-                        stats.score = 0
-                        sb.prep_highscore()
+                startup.playing = False
+                self.reset_figures(blue, orange, red, pacman)
+                maze.reset_maze()
+                stats.pacmans_left = 3
+                pygame.mixer.music.stop()
+                settings.start_intro_music()
+                settings.flag_chomp = False
+                sb.prep_pac_lives()
+                if stats.score > stats.high_score:
+                    stats.high_score = stats.score
+                    stats.score = 0
+                    sb.prep_score()
+                    sb.prep_highscore()
+            else:
+                pacman.reset_pacman()
+                self.reset_pink()
+                stats.pacmans_left -= 1
+                sb.prep_pac_lives()
+      #          print(stats.pacmans_left)
 
     def create_pinks(self, screen, sz):
         self.pinks[0].append(self.pink)

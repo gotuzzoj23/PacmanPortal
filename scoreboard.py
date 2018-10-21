@@ -1,8 +1,12 @@
+from typing import Optional, Any
 import pygame.font
+from pacman import Pacman
 
 
 class Scoreboard:
     """A class to report scoring information."""
+    high_score_image: Optional[Any]
+    score_image: Optional[Any]
     score_rect: object
     high_score_rect: object
 
@@ -34,6 +38,8 @@ class Scoreboard:
         self.hs_rect.right = self.screen_rect.right - 40
         self.hs_rect.top = 25
 
+        self.prep_pac_lives()
+
     def draw_hs(self):
         self.screen.fill(self.button_color_hs, self.hs_rect)
         self.screen.blit(self.hs, self.hs_rect)
@@ -46,7 +52,7 @@ class Scoreboard:
 
         # Display the score at the top right of the screen
         self.score_rect = self.score_image.get_rect()
-        self.score_rect.right = self.screen_rect.right - 125
+        self.score_rect.right = self.screen_rect.right - 75
         self.score_rect.top = 200
 
     def show_score(self):
@@ -54,6 +60,8 @@ class Scoreboard:
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.draw_hs()
+        for num in self.pacmans:
+            self.screen.blit(num.pacman.image, num.pacman.rect)
 
     def prep_highscore(self):
         """Turn the high score into a rendered image."""
@@ -63,5 +71,14 @@ class Scoreboard:
 
         # Center the high score at the top of the screen
         self.high_score_rect = self.high_score_image.get_rect()
-        self.high_score_rect.right = self.screen_rect.right - 125
+        self.high_score_rect.right = self.screen_rect.right - 75
         self.high_score_rect.top = 60
+
+    def prep_pac_lives(self):
+        """show how many lives are left"""
+        self.pacmans = []
+        for pacman_num in range(self.stats.pacmans_left):
+            pacman = Pacman(self.screen, mazefile='images/pacman_portal_maze.txt')
+            pacman.pacman.rect.x = 10 + pacman_num * pacman.pacman.rect.width
+            pacman.pacman.rect.y = 10
+            self.pacmans.append(pacman)

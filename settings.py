@@ -13,9 +13,16 @@ class Settings:
         self.points_coins = 10
         self.points_shields = 50
         self.points_ghost = 200
+        self.flag_chomp = False
 
     @staticmethod
     def start_intro_music():
         pygame.mixer.music.load("sounds/intro.mp3")
+        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.play(-1)
+
+    @staticmethod
+    def chomp_music():
+        pygame.mixer.music.load("sounds/chomp.mp3")
         pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1)

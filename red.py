@@ -77,7 +77,7 @@ class Red(Sprite):
                 self.screen.blit(self.reds[3][self.index].image, self.red.rect)
         self.index += 1
 
-    def update(self, maze, stats, pacman, startup, blue, pink, orange, sb):
+    def update(self, maze, settings, stats, pacman, startup, blue, pink, orange, sb):
         """Update the red's position based on the movement flag."""
         x = int(self.red.rect.centerx / 12)
         y = int(self.red.rect.centery / 12)
@@ -115,18 +115,26 @@ class Red(Sprite):
         self.red.rect.centery = self.centery
 
         if (pygame.Rect.colliderect(pacman.pacman.rect, self.red.rect)) and (not self.scared):
-            pacman.reset_pacman()
-            self.reset_red()
-            stats.pacmans_left -= 1
-            print(stats.pacmans_left)
             if stats.pacmans_left == 0:
                 startup.playing = False
                 self.reset_figures(blue, orange, pink, pacman)
                 maze.reset_maze()
+                stats.pacmans_left = 3
+                pygame.mixer.music.stop()
+                settings.start_intro_music()
+                settings.flag_chomp = False
+                sb.prep_pac_lives()
                 if stats.score > stats.high_score:
                     stats.high_score = stats.score
                     stats.score = 0
+                    sb.prep_score()
                     sb.prep_highscore()
+            else:
+                pacman.reset_pacman()
+                self.reset_red()
+                stats.pacmans_left -= 1
+                sb.prep_pac_lives()
+     #           print(stats.pacmans_left)
 
     def create_reds(self, screen, sz):
         self.reds[0].append(self.red)

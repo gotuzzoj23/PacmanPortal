@@ -75,7 +75,7 @@ class Blue(Sprite):
                 self.screen.blit(self.blues[3][self.index].image, self.blue.rect)
         self.index += 1
 
-    def update(self, maze, stats, pacman, startup, red, pink, orange, sb):
+    def update(self, maze, settings, stats, pacman, startup, red, pink, orange, sb):
         """Update the blue's position based on the movement flag."""
         x = int(self.blue.rect.centerx / 12)
         y = int(self.blue.rect.centery / 12)
@@ -113,18 +113,26 @@ class Blue(Sprite):
         self.blue.rect.centery = self.centery
 
         if (pygame.Rect.colliderect(pacman.pacman.rect, self.blue.rect)) and (not self.scared):
-            pacman.reset_pacman()
-            self.reset_blue()
-            stats.pacmans_left -= 1
-            print(stats.pacmans_left)
             if stats.pacmans_left == 0:
                 startup.playing = False
                 self.reset_figures(red, orange, pink, pacman)
                 maze.reset_maze()
+                stats.pacmans_left = 3
+                pygame.mixer.music.stop()
+                settings.start_intro_music()
+                settings.flag_chomp = False
+                sb.prep_pac_lives()
                 if stats.score > stats.high_score:
                     stats.high_score = stats.score
                     stats.score = 0
                     sb.prep_highscore()
+                    sb.prep_score()
+            else:
+                pacman.reset_pacman()
+                self.reset_blue()
+                stats.pacmans_left -= 1
+                sb.prep_pac_lives()
+            #    print(stats.pacmans_left)
 
     def create_blues(self, screen, sz):
         self.blues[0].append(self.blue)

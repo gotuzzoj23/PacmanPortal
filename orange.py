@@ -76,7 +76,7 @@ class Orange(Sprite):
                 self.screen.blit(self.oranges[3][self.index].image, self.orange.rect)
         self.index += 1
 
-    def update(self, maze, stats, pacman, startup, blue, pink, red, sb):
+    def update(self, maze, settings, stats, pacman, startup, blue, pink, red, sb):
         """Update the orange's position based on the movement flag."""
         x = int(self.orange.rect.centerx / 12)
         y = int(self.orange.rect.centery / 12)
@@ -114,20 +114,27 @@ class Orange(Sprite):
         self.orange.rect.centery = self.centery
 
         if (pygame.Rect.colliderect(pacman.pacman.rect, self.orange.rect)) and (not self.scared):
-            pacman.reset_pacman()
-            self.reset_orange()
-            stats.pacmans_left -= 1
-            print(stats.pacmans_left)
             if stats.pacmans_left == 0:
-                if stats.pacmans_left == 0:
-                    startup.playing = False
-                    self.reset_figures(blue, red, pink, pacman)
-                    maze.reset_maze()
-                    if stats.score > stats.high_score:
-                        stats.high_score = stats.score
-                        stats.score = 0
-                        sb.prep_score()
-                        sb.prep_highscore()
+                startup.playing = False
+                self.reset_figures(blue, red, pink, pacman)
+                maze.reset_maze()
+                stats.pacmans_left = 3
+                pygame.mixer.music.stop()
+                settings.start_intro_music()
+                settings.flag_chomp = False
+                sb.prep_pac_lives()
+                if stats.score > stats.high_score:
+                    stats.high_score = stats.score
+                    stats.score = 0
+                    sb.prep_score()
+                    sb.prep_score()
+                    sb.prep_highscore()
+            else:
+                pacman.reset_pacman()
+                self.reset_orange()
+                stats.pacmans_left -= 1
+                sb.prep_pac_lives()
+       #         print(stats.pacmans_left)
 
     def create_oranges(self, screen, sz):
         self.oranges[0].append(self.orange)

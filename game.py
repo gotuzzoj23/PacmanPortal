@@ -68,16 +68,20 @@ class Game:
             eloop.check_events(self.screen, self.pacman, self.startup)
             if self.startup.playing:
                 pygame.mixer.music.stop()
+                if not self.settings.flag_chomp:
+                    self.settings.chomp_music()
+                    self.settings.flag_chomp = True
+                self.settings.chomp_music()
                 self.pacman.update(self.maze, self.settings, self.stats, self.sb, self.red, self.blue, self.orange,
                                    self.pink)
-                self.red.update(self.maze, self.stats, self.pacman, self.startup, self.blue, self.pink, self.orange,
-                                self.sb)
-                self.blue.update(self.maze, self.stats, self.pacman, self.startup, self.red, self.pink, self.orange,
-                                 self.sb)
-                self.orange.update(self.maze, self.stats, self.pacman, self.startup, self.blue, self.pink, self.red,
-                                   self.sb)
-                self.pink.update(self.maze, self.stats, self.pacman, self.startup, self.blue, self.red, self.orange,
-                                 self.sb)
+                self.red.update(self.maze, self.settings, self.stats, self.pacman, self.startup, self.blue, self.pink,
+                                self.orange, self.sb)
+                self.blue.update(self.maze, self.settings, self.stats, self.pacman, self.startup, self.red, self.pink,
+                                 self.orange, self.sb)
+                self.orange.update(self.maze, self.settings, self.stats, self.pacman, self.startup, self.blue,
+                                   self.pink, self.red, self.sb)
+                self.pink.update(self.maze, self.settings, self.stats, self.pacman, self.startup, self.blue, self.red,
+                                 self.orange, self.sb)
 
             self.update_screen()
             clock.tick(155)
